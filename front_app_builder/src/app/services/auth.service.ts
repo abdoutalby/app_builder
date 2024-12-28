@@ -9,8 +9,8 @@ import { jwtDecode } from "jwt-decode";
 export class AuthService {
 
 
+  url='http://100.105.154.10:8099/api/auth/'
 
-  url = 'http://localhost:8080/api/auth/'
   constructor(private http: HttpClient, private router: Router) { }
 
   login(body: any) {

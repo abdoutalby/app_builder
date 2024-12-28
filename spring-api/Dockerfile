@@ -23,7 +23,7 @@ RUN apt-get update && \
 # ------------------------------------------------------------
 # Install Flutter
 # ------------------------------------------------------------
-ARG FLUTTER_VERSION=3.13.4
+ARG FLUTTER_VERSION=3.27.1
 RUN curl -fSL https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz -o flutter_linux.tar.xz && \
     tar -xf flutter_linux.tar.xz -C /opt && \
     rm flutter_linux.tar.xz && \

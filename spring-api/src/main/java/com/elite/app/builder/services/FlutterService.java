@@ -1222,22 +1222,56 @@ public class FlutterService {
                 return false;
             }
 
-
-            command = "flutter build apk";
+           try {
+            // Initialize the process
             process = Runtime.getRuntime().exec(command, null, new File(appname));
-            log.info("flutter build apk");
+            log.info("Executing command: {}", command);
+
+            // Capture the standard output
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            // Capture the error output
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+            // Read the standard output
+            String s;
+            StringBuilder output = new StringBuilder();
+            while ((s = stdInput.readLine()) != null) {
+                output.append(s).append("\n");
+            }
+
+            // Read the error output
+            StringBuilder errorOutput = new StringBuilder();
+            while ((s = stdError.readLine()) != null) {
+                errorOutput.append(s).append("\n");
+            }
+
+            // Wait for the process to complete
             exitCode = process.waitFor();
 
             if (exitCode == 0) {
-                log.info("apk is ready");
-
-                copyAndRenameFile(appname , appname);
-
+                log.info("APK build successful.");
+                log.debug("Build Output:\n{}", output.toString());
+                copyAndRenameFile(appname, appname);
                 return true;
             } else {
+                log.error("APK build failed with exit code: {}", exitCode);
+                log.error("Error Output:\n{}", errorOutput.toString());
+                log.debug("Build Output:\n{}", output.toString());
                 return false;
             }
 
+        } catch (IOException e) {
+            log.error("IOException occurred while executing the Flutter build command.", e);
+            return false;
+        } catch (InterruptedException e) {
+            log.error("Process was interrupted while waiting for the Flutter build command to complete.", e);
+            Thread.currentThread().interrupt(); // Restore the interrupted status
+            return false;
+        } finally {
+            if (process != null) {
+                process.destroy();
+            }
+        }
         } catch (IOException | InterruptedException e) {
             return false;
         }

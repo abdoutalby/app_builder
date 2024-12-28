@@ -1,10 +1,10 @@
 services:
-  spring-api:
+  api:
     build:
       context: spring-api
       dockerfile: Dockerfile
     ports:
-      - "8099:8080"
+      - "8099:8080"  # Host:Container
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/elite_app_builder?createDatabaseIfNotExists=true
       SPRING_DATASOURCE_USERNAME: root
@@ -54,7 +54,7 @@ services:
     ports:
       - "4200:80"
     depends_on:
-      - spring-api
+      - api   # <-- Now depends on 'api' instead of 'spring-api'
     networks:
       - backend
 

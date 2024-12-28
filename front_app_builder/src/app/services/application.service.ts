@@ -7,14 +7,15 @@ import { AuthService } from './auth.service';
 })
 export class ApplicationService {
 
- url = ''
+  apiUrl= 'http://100.105.154.10:8099' 
+
   constructor(private http: HttpClient , private authService : AuthService) { }
 
   create(body : any){
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.authService.getToken()}`, 
     });
-    return  this.http.post("http://localhost:8080/applications/",body , {
+    return  this.http.post(this.apiUrl+"/applications/",body , {
       
       headers: headers
     });
@@ -25,7 +26,7 @@ export class ApplicationService {
       Authorization: `Bearer ${this.authService.getToken()}`,
       'Content-Type': 'application/json',
     });
-    return this.http.get('http://localhost:8080/applications/byUser/'+id  , {
+    return this.http.get(this.apiUrl+'/applications/byUser/'+id  , {
       
       headers: headers
     });
